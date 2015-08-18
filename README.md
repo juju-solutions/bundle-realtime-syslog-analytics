@@ -30,6 +30,14 @@ See `juju quickstart --help` for deployment options, including machine
 constraints and how to deploy a locally modified version of the
 `realtime-syslog-analytics` bundle.yaml.
 
+Once deployment is complete, expose the zeppelin service:
+
+    juju expose zeppelin
+
+You may now access the Zeppelin web interface at
+http://{spark_unit_ip_address}:9090. The ip address can be found by running
+`juju status spark | grep public-address`.
+
 
 ## Testing the deployment
 
