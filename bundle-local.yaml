@@ -1,63 +1,63 @@
 services:
   compute-slave:
-    charm: cs:trusty/apache-hadoop-compute-slave-8
+    charm: apache-hadoop-compute-slave
     num_units: 3
     annotations:
       gui-x: "300"
       gui-y: "200"
     constraints: mem=3G
   flume-hdfs:
-    charm: cs:trusty/apache-flume-hdfs
+    charm: apache-flume-hdfs
     num_units: 1
     annotations:
       gui-x: "1200"
       gui-y: "350"
   flume-syslog:
-    charm: cs:trusty/apache-flume-syslog
+    charm: apache-flume-syslog
     num_units: 1
     annotations:
       gui-x: "1200"
       gui-y: "600"
   hdfs-master:
-    charm: cs:trusty/apache-hadoop-hdfs-master-8
+    charm: apache-hadoop-hdfs-master
     num_units: 1
     annotations:
       gui-x: "600"
       gui-y: "350"
     constraints: mem=7G
   plugin:
-    charm: cs:trusty/apache-hadoop-plugin-7
+    charm: apache-hadoop-plugin
     annotations:
       gui-x: "900"
       gui-y: "200"
   rsyslog-forwarder:
-    charm: cs:trusty/rsyslog-forwarder-ha-4
+    charm: rsyslog-forwarder-ha
     annotations:
       gui-x: "900"
       gui-y: "600"
   secondary-namenode:
-    charm: cs:trusty/apache-hadoop-hdfs-secondary-6
+    charm: apache-hadoop-hdfs-secondary
     num_units: 1
     annotations:
       gui-x: "600"
       gui-y: "600"
     constraints: mem=7G
   spark:
-    charm: cs:trusty/apache-spark
+    charm: apache-spark
     num_units: 1
     annotations:
       gui-x: "1200"
       gui-y: "100"
     constraints: mem=7G
   yarn-master:
-    charm: cs:trusty/apache-hadoop-yarn-master-6
+    charm: apache-hadoop-yarn-master
     num_units: 1
     annotations:
       gui-x: "600"
       gui-y: "100"
     constraints: mem=7G
   zeppelin:
-    charm: cs:trusty/apache-zeppelin
+    charm: apache-zeppelin
     annotations:
       gui-x: "1500"
       gui-y: "100"
