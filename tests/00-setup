@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if ! python3 -c 'import amulet' &> /dev/null; then
-    echo Installing Amulet...
-    sudo add-apt-repository -y ppa:juju/stable
-    sudo apt-get update
-    sudo apt-get -y install amulet
-fi
