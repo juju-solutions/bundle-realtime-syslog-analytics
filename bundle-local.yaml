@@ -5,7 +5,7 @@ services:
     annotations:
       gui-x: "300"
       gui-y: "200"
-    constraints: mem=3G
+    constraints: mem=7G
   flume-hdfs:
     charm: apache-flume-hdfs
     num_units: 1

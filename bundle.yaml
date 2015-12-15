@@ -5,7 +5,7 @@ services:
     annotations:
       gui-x: "300"
       gui-y: "200"
-    constraints: mem=3G
+    constraints: mem=7G
   flume-hdfs:
     charm: cs:trusty/apache-flume-hdfs-4
     num_units: 1
@@ -26,7 +26,7 @@ services:
       gui-y: "350"
     constraints: mem=7G
   plugin:
-    charm: cs:trusty/apache-hadoop-plugin-8
+    charm: cs:trusty/apache-hadoop-plugin-9
     annotations:
       gui-x: "900"
       gui-y: "200"
