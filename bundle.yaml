@@ -26,7 +26,7 @@ services:
       gui-y: "350"
     constraints: mem=7G
   plugin:
-    charm: cs:trusty/apache-hadoop-plugin-9
+    charm: cs:trusty/apache-hadoop-plugin-10
     annotations:
       gui-x: "900"
       gui-y: "200"
