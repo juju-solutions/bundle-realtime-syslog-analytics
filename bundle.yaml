@@ -1,77 +1,69 @@
 services:
-  compute-slave:
-    charm: cs:trusty/apache-hadoop-compute-slave-9
+  namenode:
+    charm: cs:~bigdata-dev/trusty/apache-hadoop-namenode-1
+    num_units: 1
+    annotations:
+      gui-x: "600"
+      gui-y: "350"
+    constraints: mem=7G
+  resourcemanager:
+    charm: cs:~bigdata-dev/trusty/apache-hadoop-resourcemanager-1
+    num_units: 1
+    annotations:
+      gui-x: "600"
+      gui-y: "100"
+    constraints: mem=7G
+  slave:
+    charm: cs:~bigdata-dev/trusty/apache-hadoop-slave-1
     num_units: 3
     annotations:
-      gui-x: "300"
+      gui-x: "250"
       gui-y: "200"
     constraints: mem=7G
+  plugin:
+    charm: cs:~bigdata-dev/trusty/apache-hadoop-plugin-62
+    annotations:
+      gui-x: "950"
+      gui-y: "200"
   flume-hdfs:
-    charm: cs:trusty/apache-flume-hdfs-4
+    charm: cs:~bigdata-dev/trusty/apache-flume-hdfs-27
     num_units: 1
     annotations:
       gui-x: "1200"
       gui-y: "350"
   flume-syslog:
-    charm: cs:trusty/apache-flume-syslog-3
+    charm: cs:~bigdata-dev/trusty/apache-flume-syslog-20
     num_units: 1
     annotations:
       gui-x: "1200"
       gui-y: "600"
-  hdfs-master:
-    charm: cs:trusty/apache-hadoop-hdfs-master-9
-    num_units: 1
-    annotations:
-      gui-x: "600"
-      gui-y: "350"
-    constraints: mem=7G
-  plugin:
-    charm: cs:trusty/apache-hadoop-plugin-10
-    annotations:
-      gui-x: "900"
-      gui-y: "200"
   rsyslog-forwarder:
     charm: cs:trusty/rsyslog-forwarder-ha-5
     annotations:
       gui-x: "900"
       gui-y: "600"
-  secondary-namenode:
-    charm: cs:trusty/apache-hadoop-hdfs-secondary-7
-    num_units: 1
-    annotations:
-      gui-x: "600"
-      gui-y: "600"
-    constraints: mem=7G
   spark:
-    charm: cs:trusty/apache-spark-6
+    charm: cs:~bigdata-dev/trusty/apache-spark-64
     num_units: 1
     annotations:
       gui-x: "1200"
       gui-y: "100"
     constraints: mem=7G
-  yarn-master:
-    charm: cs:trusty/apache-hadoop-yarn-master-7
-    num_units: 1
-    annotations:
-      gui-x: "600"
-      gui-y: "100"
-    constraints: mem=7G
   zeppelin:
-    charm: cs:trusty/apache-zeppelin-5
+    charm: cs:~bigdata-dev/trusty/apache-zeppelin-44
     annotations:
       gui-x: "1500"
       gui-y: "100"
 series: trusty
 relations:
-  - [yarn-master, hdfs-master]
-  - [secondary-namenode, hdfs-master]
-  - [compute-slave, yarn-master]
-  - [compute-slave, hdfs-master]
-  - [plugin, yarn-master]
-  - [plugin, hdfs-master]
+  - [namenode, slave]
+  - [resourcemanager, slave]
+  - [resourcemanager, namenode]
+  - [plugin, namenode]
+  - [plugin, resourcemanager]
   - [flume-hdfs, plugin]
   - [flume-syslog, flume-hdfs]
-  - [rsyslog-forwarder, hdfs-master]
+  - [rsyslog-forwarder, namenode]
   - [rsyslog-forwarder, flume-syslog]
   - [spark, plugin]
   - [zeppelin, spark]
