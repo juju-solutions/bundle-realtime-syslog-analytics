@@ -3,16 +3,16 @@
 This bundle is a 9 node cluster designed to scale out. Built around Apache
 Hadoop components, it contains the following units:
 
-* 1 NameNode (HDFS)
-  - 1 Rsyslog Forwarder (colocated on the NameNode)
-* 1 ResourceManager (YARN)
-* 3 Slaves (DataNode and NodeManager)
-* 1 Flume-HDFS
-  - 1 Plugin (colocated on the Flume unit)
-* 1 Flume-Syslog
-* 1 Spark
- - 1 Plugin (colocated on the Spark unit)
- - 1 Zeppelin (colocated on the Spark unit)
+  * 1 NameNode (HDFS)
+    - 1 Rsyslog Forwarder (colocated on the NameNode)
+  * 1 ResourceManager (YARN)
+  * 3 Slaves (DataNode and NodeManager)
+  * 1 Flume-HDFS
+    - 1 Plugin (colocated on the Flume unit)
+  * 1 Flume-Syslog
+  * 1 Spark
+   - 1 Plugin (colocated on the Spark unit)
+   - 1 Zeppelin (colocated on the Spark unit)
 
 Syslog events generated on the NameNode unit are forwarded to the
 `apache-flume-syslog` charm. These events are serialized and sent to the
