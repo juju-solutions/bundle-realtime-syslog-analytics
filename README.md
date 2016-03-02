@@ -3,11 +3,10 @@
 This bundle is a 9 node cluster designed to scale out. Built around Apache
 Hadoop components, it contains the following units:
 
-* 1 HDFS Master
-  - 1 Rsyslog Forwarder (colocated on the HDFS Master)
-* 1 HDFS Secondary Namenode
-* 1 YARN Master
-* 3 Compute Slaves
+* 1 NameNode (HDFS)
+  - 1 Rsyslog Forwarder (colocated on the NameNode)
+* 1 ResourceManager (YARN)
+* 3 Slaves (DataNode and NodeManager)
 * 1 Flume-HDFS
   - 1 Plugin (colocated on the Flume unit)
 * 1 Flume-Syslog
@@ -15,13 +14,14 @@ Hadoop components, it contains the following units:
  - 1 Plugin (colocated on the Spark unit)
  - 1 Zeppelin (colocated on the Spark unit)
 
-Syslog events generated on the HDFS Master unit are forwarded to the
+Syslog events generated on the NameNode unit are forwarded to the
 `apache-flume-syslog` charm. These events are serialized and sent to the
 `apache-flume-hdfs` charm to be stored in HDFS. We have included a sample
 application to analyze these events with Spark/Zeppelin.
 
 
 ## Usage
+
 Deploy this bundle using juju-quickstart:
 
     juju quickstart u/bigdata-dev/realtime-syslog-analytics
@@ -35,7 +35,7 @@ Once deployment is complete, expose the zeppelin service:
     juju expose zeppelin
 
 You may now access the Zeppelin web interface at
-http://{spark_unit_ip_address}:9090. The ip address can be found by running
+`http://{spark_unit_ip_address}:9090`. The ip address can be found by running
 `juju status spark | grep public-address`.
 
 
@@ -65,19 +65,20 @@ The `<action-id>` value will be in the `juju action status` output.
 
 
 ## Scale Out Usage
+
 This bundle was designed to scale out. To increase the amount of Compute
 Slaves, you can add units to the compute-slave service. To add one unit:
 
-    juju add-unit compute-slave
+    juju add-unit slave
 
 You can also add multiple units, for examle, to add four more compute slaves:
 
-    juju add-unit -n4 compute-slave
+    juju add-unit -n4 slave
 
 
 ## Contact Information
 
-- <bigdata-dev@lists.launchpad.net>
+- <bigdata@lists.ubuntu.com>
 
 
 ## Help
