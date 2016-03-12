@@ -10,7 +10,7 @@ import amulet
 
 
 class TestBundle(unittest.TestCase):
-    bundle_file = os.path.join(os.path.dirname(__file__), '..', 'bundle-local.yaml')
+    bundle_file = os.path.join(os.path.dirname(__file__), '..', 'bundle.yaml')
 
     @classmethod
     def setUpClass(cls):
