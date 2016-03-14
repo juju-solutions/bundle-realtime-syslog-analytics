@@ -7,7 +7,7 @@ services:
       gui-y: "350"
     constraints: mem=7G
   resourcemanager:
-    charm: cs:~bigdata-dev/trusty/apache-hadoop-resourcemanager-3
+    charm: cs:~bigdata-dev/trusty/apache-hadoop-resourcemanager-4
     num_units: 1
     annotations:
       gui-x: "600"
