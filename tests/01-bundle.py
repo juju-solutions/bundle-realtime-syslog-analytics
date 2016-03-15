@@ -21,10 +21,10 @@ class TestBundle(unittest.TestCase):
         cls.d.load(bundle)
         cls.d.setup(timeout=1800)
         cls.d.sentry.wait_for_messages({
-            'slave': 'Ready',
-            'plugin': 'Ready',
+            'slave': 'Ready (DataNode & NodeManager)',
+            'plugin': 'Ready (HDFS & YARN)',
             'zeppelin': 'Ready',
-            'flume-syslog': 'Ready',
+            'flume-syslog': 'Ready (Syslog sources: 1)',
         }, timeout=1800)
         cls.hdfs = cls.d.sentry['namenode'][0]
         cls.yarn = cls.d.sentry['resourcemanager'][0]
@@ -39,7 +39,6 @@ class TestBundle(unittest.TestCase):
         hdfs, retcode = self.hdfs.run("pgrep -a java")
         yarn, retcode = self.yarn.run("pgrep -a java")
         slave, retcode = self.slave.run("pgrep -a java")
-        secondary, retcode = self.secondary.run("pgrep -a java")
         spark, retcode = self.spark.run("pgrep -a java")
 
         # .NameNode needs the . to differentiate it from SecondaryNameNode
@@ -106,7 +105,8 @@ class TestBundle(unittest.TestCase):
             ('terasort',     "su ubuntu -c 'hadoop jar {} terasort /user/ubuntu/teragenout /user/ubuntu/terasortout'".
                 format(jar_file)),
             ('mapreduce #2', "su hdfs -c 'hdfs dfs -ls /user/ubuntu/terasortout/_SUCCESS'"),
-            ('cleanup',      "su hdfs -c 'hdfs dfs -rm -r /user/ubuntu/teragenout'"),
+            ('cleanup #1',      "su hdfs -c 'hdfs dfs -rm -r /user/ubuntu/teragenout'"),
+            ('cleanup #2',      "su hdfs -c 'hdfs dfs -rm -r /user/ubuntu/terasortout'"),
         ]
         for name, step in test_steps:
             output, retcode = self.spark.run(step)
