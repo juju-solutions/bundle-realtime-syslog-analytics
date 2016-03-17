@@ -26,7 +26,7 @@ services:
       gui-x: "950"
       gui-y: "200"
   flume-hdfs:
-    charm: cs:~bigdata-dev/trusty/apache-flume-hdfs-30
+    charm: cs:~bigdata-dev/trusty/apache-flume-hdfs-31
     num_units: 1
     annotations:
       gui-x: "1200"
