@@ -31,6 +31,9 @@ class TestBundle(unittest.TestCase):
         cls.slave = cls.d.sentry['slave'][0]
         cls.spark = cls.d.sentry['spark'][0]
         cls.zeppelin = cls.d.sentry['zeppelin'][0]
+        # Roll flume output every 10 seconds so we don't have to wait
+        # for the default 5 minute roll.
+        cls.d.configure('flume-hdfs', {'roll_interval': 10})
 
     def test_components(self):
         """
@@ -118,15 +121,15 @@ class TestBundle(unittest.TestCase):
 
     def test_ingest(self):
         self.spark.ssh('ls /home/ubuntu')  # ensure at least one pure ssh session for the logs
-        for i in amulet.helpers.timeout_gen(60 * 5):  # wait for the log messages to be ingested
-            output, retcode = self.spark.run("su hdfs -c 'hdfs dfs -ls /user/flume/flume-syslog/*/*'")
+        for i in amulet.helpers.timeout_gen(60):  # wait 60s for the log messages to be ingested
+            output, retcode = self.spark.run("su hdfs -c 'hdfs dfs -ls /user/flume/flume-syslog/*/*.txt'")
             if retcode == 0 and 'FlumeData' in output:
                 break
 
         ssh_count = textwrap.dedent("""
             from pyspark import SparkContext
             sc = SparkContext(appName="ssh-count")
-            count = sc.textFile("/user/flume/flume-syslog/*/*").filter(lambda line: "sshd" in line).count()
+            count = sc.textFile("/user/flume/flume-syslog/*/*.txt").filter(lambda line: "sshd" in line).count()
             print "SSH Logins: %s" % count
         """)
         output, retcode = self.spark.run("cat << EOP > /home/ubuntu/ssh-count.py\n{}\nEOP".format(ssh_count))
