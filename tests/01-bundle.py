@@ -1,12 +1,17 @@
 #!/usr/bin/env python3
 
+import json
 import re
 import os
+from operator import itemgetter
 import unittest
+from urllib.parse import urljoin
 import textwrap
+from time import sleep
 
-import yaml
 import amulet
+import requests
+import yaml
 
 
 class TestBundle(unittest.TestCase):
@@ -19,6 +24,7 @@ class TestBundle(unittest.TestCase):
             bun = f.read()
         bundle = yaml.safe_load(bun)
         cls.d.load(bundle)
+        cls.d.expose('zeppelin')
         cls.d.setup(timeout=1800)
         cls.d.sentry.wait_for_messages({
             'slave': 'Ready (DataNode & NodeManager)',
@@ -138,7 +144,46 @@ class TestBundle(unittest.TestCase):
         assert re.search(r'SSH Logins: [1-9][0-9]*', output), 'ssh-count.py failed: %s' % output
 
     def test_zeppelin(self):
-        pass  # requires javascript; how to test?
+        notebook_id = 'flume-tutorial'
+        zep_addr = self.zeppelin.info['public-address']
+        base_url = 'http://{}:9090/api/notebook/'.format(zep_addr)
+        interp_url = urljoin(base_url, 'interpreter/bind/%s' % notebook_id)
+        job_url = urljoin(base_url, 'job/%s' % notebook_id)
+        para_url = urljoin(base_url, '%s/paragraph/' % notebook_id)
+
+        # bind interpreters
+        interpreters = requests.get(interp_url, timeout=60).json()
+        interp_ids = list(map(itemgetter('id'), interpreters['body']))
+        requests.put(interp_url, data=json.dumps(interp_ids), timeout=60)
+
+        # run notebook
+        requests.post(job_url, timeout=60)
+        for i in amulet.helpers.timeout_gen(60 * 5):
+            sleep(10)  # sleep first to give the job some time to run
+            try:
+                response = requests.get(job_url, timeout=60)
+            except requests.exceptions.Timeout:
+                # sometimes a long-running paragraph will cause the notebook
+                # job endpoint to timeout, but it may eventually recover
+                continue
+            if response.status_code == 500:
+                # sometimes a long-running paragraph will cause the notebook
+                # job endpoint to return 500, but it may eventually recover
+                continue
+            statuses = list(map(itemgetter('status'), response.json()['body']))
+            in_progress = {'PENDING', 'RUNNING'} & set(statuses)
+            if not in_progress:
+                break
+
+        # check for errors
+        errors = []
+        for result in response.json()['body']:
+            if result['status'] == 'ERROR':
+                para_id = result['id']
+                resp = requests.get(urljoin(para_url, para_id), timeout=60)
+                para = resp.json()['body']
+                errors.append(para['errorMessage'].splitlines()[0])
+        self.assertEqual(errors, [])
 
 
 if __name__ == '__main__':
