@@ -1,3 +1,4 @@
 reset: false
 packages:
   - amulet
+  - python-requests
