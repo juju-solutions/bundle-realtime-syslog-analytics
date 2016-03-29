@@ -39,7 +39,7 @@ You may now access the Zeppelin web interface at
 `juju status spark | grep public-address`.
 
 
-## Testing the deployment
+### Verify the deployment
 
 The services provide extended status reporting to indicate when they are ready:
 
@@ -50,28 +50,32 @@ progress of the deployment:
 
     watch -n 0.5 juju status --format=tabular
 
-The message for each unit will provide information about that unit's state.
-Once they all indicate that they are ready, you can use the provided `terasort`
-action to test that the Apache Hadoop components are working as expected:
+The charm for each core component (namenode, resourcemanager, spark, zeppelin)
+also each provide a `smoke-test` action that can be used to verify that each
+component is functioning as expected.  You can run them all and then watch the
+action status list:
 
-    juju action do plugin/0 terasort
-    watch juju action status
+    juju action do namenode/0 smoke-test
+    juju action do resourcemanager/0 smoke-test
+    juju action do spark/0 smoke-test
+    juju action do zeppelin/0 smoke-test
+    watch -n 0.5 juju action status
 
-Once the action is complete, you can retrieve the results:
+Eventually, all of the actions should settle to `status: completed`.  If
+any go instead to `status: failed` then it means that component is not working
+as expected.  You can get more information about that component's smoke test:
 
     juju action fetch <action-id>
-
-The `<action-id>` value will be in the `juju action status` output.
 
 
 ## Scale Out Usage
 
-This bundle was designed to scale out. To increase the amount of Compute
-Slaves, you can add units to the compute-slave service. To add one unit:
+This bundle was designed to scale out. To increase the amount of slaves,
+you can add units to the slave service. To add one unit:
 
     juju add-unit slave
 
-You can also add multiple units, for examle, to add four more compute slaves:
+You can also add multiple units, for examle, to add four more slaves:
 
     juju add-unit -n4 slave
 
