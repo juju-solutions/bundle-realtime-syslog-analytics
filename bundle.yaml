@@ -14,14 +14,14 @@ services:
       gui-y: "100"
     constraints: mem=7G
   slave:
-    charm: cs:~bigdata-dev/trusty/apache-hadoop-slave-4
+    charm: cs:~bigdata-dev/trusty/apache-hadoop-slave-5
     num_units: 3
     annotations:
       gui-x: "250"
       gui-y: "200"
     constraints: mem=7G
   plugin:
-    charm: cs:~bigdata-dev/trusty/apache-hadoop-plugin-65
+    charm: cs:~bigdata-dev/trusty/apache-hadoop-plugin-66
     annotations:
       gui-x: "950"
       gui-y: "200"
