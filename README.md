@@ -24,7 +24,7 @@ application to analyze these events with Spark/Zeppelin.
 
 Deploy this bundle using juju-quickstart:
 
-    juju quickstart u/bigdata-dev/realtime-syslog-analytics
+    juju quickstart realtime-syslog-analytics
 
 See `juju quickstart --help` for deployment options, including machine
 constraints and how to deploy a locally modified version of the
