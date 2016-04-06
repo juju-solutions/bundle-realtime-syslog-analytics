@@ -1,6 +1,6 @@
 # Realtime Syslog Analytics
 
-This bundle is a 9 node cluster designed to scale out. Built around Apache
+This bundle is an 8 node cluster designed to scale out. Built around Apache
 Hadoop components, it contains the following units:
 
   * 1 NameNode (HDFS)
@@ -11,8 +11,8 @@ Hadoop components, it contains the following units:
     - 1 Plugin (colocated on the Flume unit)
   * 1 Flume-Syslog
   * 1 Spark
-   - 1 Plugin (colocated on the Spark unit)
-   - 1 Zeppelin (colocated on the Spark unit)
+    - 1 Plugin (colocated on the Spark unit)
+    - 1 Zeppelin (colocated on the Spark unit)
 
 Syslog events generated on the NameNode unit are forwarded to the
 `apache-flume-syslog` charm. These events are serialized and sent to the
