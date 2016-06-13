@@ -45,6 +45,8 @@ services:
   spark:
     charm: apache-spark
     num_units: 1
+    options:
+      spark_execution_mode: "yarn-client"
     annotations:
       gui-x: "1200"
       gui-y: "100"
