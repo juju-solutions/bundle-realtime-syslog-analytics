@@ -1,0 +1,7 @@
+{
+    "friendly-name": "Realtime Syslog Analytics",
+    "version": 1,
+    "options-whitelist": {
+        "spark": ["spark_execution_mode"]
+    }
+}
