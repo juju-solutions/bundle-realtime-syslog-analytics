@@ -29,13 +29,13 @@ def main():
         errs = "\n".join(["{}: {}".format(n, m) for n, m in errored_machines])
         error("Machine creation errors:\n{}".format(errs))
 
-    # 13 total agents for this spell
+    # 8 total agents for this spell
     if len(agent_states) < NUM_AGENTS:
         fail('{} applications are still deploying'.format(
             NUM_AGENTS - len(agent_states)))
 
-    # Ganglia does not use the normal status-set 'active' so we skip their
-    # workload status when checking all agent states.
+    # In case some services do not support latest status-set command
+    # they will be seen as unknown
     active_states = [state == 'active' for _, state, _ in agent_states
                      if state != 'unknown']
     if len(active_states) > 0 and all(active_states):

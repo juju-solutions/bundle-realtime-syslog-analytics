@@ -29,7 +29,7 @@ Deploy this bundle using juju-quickstart:
 Alternatively, you can deploy using **conjure-up**
 
     apt install conjure-up
-    conjure-up analytics
+    conjure-up bigdata-syslog-analytics
 
 See `juju quickstart --help` for deployment options, including machine
 constraints and how to deploy a locally modified version of the
