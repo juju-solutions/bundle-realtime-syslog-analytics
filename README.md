@@ -1,4 +1,4 @@
-# Realtime Syslog Analytics
+## Overview
 
 This bundle is an 8 node cluster designed to scale out. Built around Apache
 Hadoop components, it contains the following units:
@@ -22,65 +22,88 @@ application to analyze these events with Spark/Zeppelin.
 
 ## Usage
 
-Deploy this bundle using juju-quickstart:
+A working Juju installation is assumed to be present. If you have not yet set
+up Juju, please follow the
+[getting-started](https://jujucharms.com/docs/2.0/getting-started) instructions
+prior to deploying this bundle. Once ready, deploy this bundle with the
+`juju deploy` command:
 
-    juju quickstart realtime-syslog-analytics
+    juju deploy realtime-syslog-analytics
 
-Alternatively, you can deploy using **conjure-up**
+Alternatively, you can deploy using `conjure-up`. This provides a text-based
+walkthrough of bundle options that you may want to adjust at deploy time:
 
-    apt install conjure-up
+    sudo apt install conjure-up
     conjure-up bigdata-syslog-analytics
 
-See `juju quickstart --help` for deployment options, including machine
-constraints and how to deploy a locally modified version of the
-`realtime-syslog-analytics` bundle.yaml.
+_**Note**: The above assumes Juju 2.0 or greater. If using an earlier version
+of Juju, use [juju-quickstart](https://launchpad.net/juju-quickstart) with the
+following syntax: `juju quickstart cs:bundle/realtime-syslog-analytics`._
 
-Once deployment is complete, expose the zeppelin service:
+Once deployment is complete, expose Zeppelin:
 
     juju expose zeppelin
 
 You may now access the Zeppelin web interface at
-`http://{spark_unit_ip_address}:9090`. The ip address can be found by running
-`juju status spark | grep public-address`.
+`http://{zeppelin_ip_address}:9090`. The ip address can be found by running
+`juju status --format=yaml zeppelin | grep public-address`.
 
 
-### Verify the deployment
+## Verify the deployment
 
-The services provide extended status reporting to indicate when they are ready:
+### Status
+The applications that make up this bundle provide status messages to
+indicate when they are ready:
 
-    juju status --format=tabular
+    juju status
 
 This is particularly useful when combined with `watch` to track the on-going
 progress of the deployment:
 
-    watch -n 0.5 juju status --format=tabular
+    watch -n 0.5 juju status
 
-The charm for each core component (namenode, resourcemanager, spark, zeppelin)
-also each provide a `smoke-test` action that can be used to verify that each
-component is functioning as expected.  You can run them all and then watch the
-action status list:
+The message for each unit will provide information about that unit's state.
+Once they all indicate that they are ready, you can perform a smoke test
+to verify that the bundle is working as expected.
 
-    juju action do namenode/0 smoke-test
-    juju action do resourcemanager/0 smoke-test
-    juju action do spark/0 smoke-test
-    juju action do zeppelin/0 smoke-test
-    watch -n 0.5 juju action status
+### Smoke Test
+The charms for each core component (namenode, resourcemanager, spark, zeppelin)
+provide a `smoke-test` action that can be used to verify the application is
+functioning as expected. You can run them all with the following:
+
+    juju run-action namenode/0 smoke-test
+    juju run-action resourcemanager/0 smoke-test
+    juju run-action spark/0 smoke-test
+    juju run-action zeppelin/0 smoke-test
+
+_**Note**: The above assumes Juju 2.0 or greater. If using an earlier version
+of Juju, the syntax is `juju action do <application>/0 smoke-test`._
+
+You can watch the progress of the smoke test actions with:
+
+    watch -n 0.5 juju show-action-status
+
+_**Note**: The above assumes Juju 2.0 or greater. If using an earlier version
+of Juju, the syntax is `juju action status`._
 
 Eventually, all of the actions should settle to `status: completed`.  If
-any go instead to `status: failed` then it means that component is not working
-as expected.  You can get more information about that component's smoke test:
+any report `status: failed`, that application is not working as expected. Get
+more information about a specific smoke test with:
 
-    juju action fetch <action-id>
+    juju show-action-output <action-id>
+
+_**Note**: The above assumes Juju 2.0 or greater. If using an earlier version
+of Juju, the syntax is `juju action fetch <action-id>`._
 
 
 ## Scale Out Usage
 
-This bundle was designed to scale out. To increase the amount of slaves,
-you can add units to the slave service. To add one unit:
+This bundle was designed to scale out. To increase the amount of hadoop
+slaves, simple add more units. To add one unit:
 
     juju add-unit slave
 
-You can also add multiple units, for examle, to add four more slaves:
+You can also add multiple units, for example, to add four more slaves:
 
     juju add-unit -n4 slave
 
