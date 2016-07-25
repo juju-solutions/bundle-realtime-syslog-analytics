@@ -69,3 +69,8 @@ relations:
   - [rsyslog-forwarder, flume-syslog]
   - [spark, plugin]
   - [zeppelin, spark]
+description: |
+  This spell provides a big data environment for analysing syslog events. Built around Apache Hadoop components, it offers a repeatable and reliable way to setup complex software across multiple substrates.
+tags:
+  - conjure-up-bigdata-syslog-analytics
+  - conjure-up-bigdata

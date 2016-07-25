@@ -26,6 +26,11 @@ Deploy this bundle using juju-quickstart:
 
     juju quickstart realtime-syslog-analytics
 
+Alternatively, you can deploy using **conjure-up**
+
+    apt install conjure-up
+    conjure-up bigdata-syslog-analytics
+
 See `juju quickstart --help` for deployment options, including machine
 constraints and how to deploy a locally modified version of the
 `realtime-syslog-analytics` bundle.yaml.
