@@ -70,7 +70,10 @@ relations:
   - [spark, plugin]
   - [zeppelin, spark]
 description: |
-  This provides a big data environment for analysing syslog events. Built around Apache Hadoop components, it offers a repeatable and reliable way to setup complex software across multiple substrates.
+  This provides a big data environment for analysing syslog events.  Built
+  around Apache Hadoop, Apache Spark, Apache Zeppelin, Apache Flume, and
+  Rsyslog components, it offers log analysis via Hadoop or Spark processing,
+  with Zeppelin notebook for development.
 tags:
   - conjure-up-bigdata-syslog-analytics
   - conjure-up-bigdata
