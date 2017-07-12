@@ -1,79 +1,117 @@
+series: xenial
+description: >
+  This is a five unit big data cluster that includes Hadoop 2.7.3 and other
+  components from Apache Bigtop. By leveraging Rsyslog and Apache Flume, this
+  bundle provides an environment for analysing syslog events in Apache
+  Zeppelin web notebooks.
+tags:
+  - analytics
+  - apache
+  - bigtop
+  - big_data
 services:
   namenode:
-    charm: cs:trusty/apache-hadoop-namenode-2
+    charm: "cs:xenial/hadoop-namenode-27"
+    constraints: "mem=7G root-disk=32G"
     num_units: 1
     annotations:
-      gui-x: "600"
-      gui-y: "350"
-    constraints: mem=7G
+      gui-x: "500"
+      gui-y: "800"
+    to:
+      - "0"
   resourcemanager:
-    charm: cs:trusty/apache-hadoop-resourcemanager-3
+    charm: "cs:xenial/hadoop-resourcemanager-29"
+    constraints: "mem=7G root-disk=32G"
     num_units: 1
     annotations:
-      gui-x: "600"
-      gui-y: "100"
-    constraints: mem=7G
+      gui-x: "500"
+      gui-y: "0"
+    to:
+      - "0"
   slave:
-    charm: cs:trusty/apache-hadoop-slave-2
+    charm: "cs:xenial/hadoop-slave-28"
+    constraints: "mem=7G root-disk=32G"
     num_units: 3
     annotations:
-      gui-x: "250"
-      gui-y: "200"
-    constraints: mem=7G
+      gui-x: "0"
+      gui-y: "400"
+    to:
+      - "1"
+      - "2"
+      - "3"
   plugin:
-    charm: cs:trusty/apache-hadoop-plugin-14
+    charm: "cs:xenial/hadoop-plugin-27"
     annotations:
-      gui-x: "950"
-      gui-y: "200"
-  flume-hdfs:
-    charm: cs:trusty/apache-flume-hdfs-6
+      gui-x: "1000"
+      gui-y: "400"
+  client:
+    charm: "cs:xenial/hadoop-client-8"
+    constraints: "mem=7G root-disk=32G"
     num_units: 1
     annotations:
-      gui-x: "1200"
-      gui-y: "350"
-  flume-syslog:
-    charm: cs:trusty/apache-flume-syslog-5
-    num_units: 1
-    annotations:
-      gui-x: "1200"
-      gui-y: "600"
-  rsyslog-forwarder:
-    charm: cs:trusty/rsyslog-forwarder-ha-9
-    annotations:
-      gui-x: "900"
-      gui-y: "600"
-  spark:
-    charm: cs:trusty/apache-spark-9
-    num_units: 1
-    options:
-      spark_execution_mode: "yarn-client"
-    annotations:
-      gui-x: "1200"
-      gui-y: "100"
-    constraints: mem=7G
+      gui-x: "1250"
+      gui-y: "400"
+    to:
+      - "4"
   zeppelin:
-    charm: cs:trusty/apache-zeppelin-7
+    charm: "cs:xenial/zeppelin-27"
+    constraints: "mem=7G root-disk=32G"
+    num_units: 1
+    annotations:
+      gui-x: "1000"
+      gui-y: "0"
+    to:
+      - "4"
+# TODO: Charm bigtop flume
+  flume-hdfs:
+    charm: "cs:~bigdata-dev/xenial/apache-flume-hdfs-40"
+    num_units: 1
+    annotations:
+      gui-x: "1000"
+      gui-y: "800"
+    to:
+      - "4"
+  flume-syslog:
+    charm: "cs:~bigdata-dev/xenial/apache-flume-syslog-31"
+    num_units: 1
     annotations:
       gui-x: "1500"
-      gui-y: "100"
-series: trusty
+      gui-y: "800"
+    to:
+      - "5"
+  rsyslog-forwarder-ha:
+    charm: "cs:~bigdata-dev/xenial/rsyslog-forwarder-ha-7"
+    annotations:
+      gui-x: "1500"
+      gui-y: "400"
 relations:
+  - [resourcemanager, namenode]
   - [namenode, slave]
   - [resourcemanager, slave]
-  - [resourcemanager, namenode]
   - [plugin, namenode]
   - [plugin, resourcemanager]
+  - [zeppelin, plugin]
+  - [client, plugin]
   - [flume-hdfs, plugin]
-  - [flume-syslog, flume-hdfs]
-  - [rsyslog-forwarder, namenode]
-  - [rsyslog-forwarder, flume-syslog]
-  - [spark, plugin]
-  - [zeppelin, spark]
-description: |
-  This provides a big data environment for analysing syslog events.  Built
-  around Apache Hadoop, Apache Spark, Apache Zeppelin, Apache Flume, and
-  Rsyslog components, it offers log analysis via Hadoop or Spark processing,
-  with Zeppelin notebook for development.
-tags:
-  - conjure-up-bigdata-syslog-analytics
-  - conjure-up-bigdata
+  - ["rsyslog-forwarder-ha:juju-info", "client:juju-info"]
+  - ["flume-syslog:syslog", "rsyslog-forwarder-ha:syslog"]
+  - ["flume-hdfs:flume-source", "flume-syslog:flume-sink"]
+machines:
+  "0":
+    series: "xenial"
+    constraints: "mem=7G root-disk=32G"
+  "1":
+    series: "xenial"
+    constraints: "mem=7G root-disk=32G"
+  "2":
+    series: "xenial"
+    constraints: "mem=7G root-disk=32G"
+  "3":
+    series: "xenial"
+    constraints: "mem=7G root-disk=32G"
+  "4":
+    series: "xenial"
+    constraints: "mem=7G root-disk=32G"
+  "5":
+    series: "xenial"
+    constraints: "mem=3G root-disk=32G"

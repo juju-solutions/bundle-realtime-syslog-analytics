@@ -1,4 +1,9 @@
 reset: false
+deployment_timeout: 3600
+sources:
+  - 'ppa:juju/stable'
 packages:
   - amulet
+  - pyspark
   - python-requests
+  - python3-yaml
