@@ -1,6 +1,6 @@
 series: xenial
 description: >
-  This is a five unit big data cluster that includes Hadoop 2.7.3 and other
+  This is a six unit big data cluster that includes Hadoop 2.7.3 and other
   components from Apache Bigtop. By leveraging Rsyslog and Apache Flume, this
   bundle provides an environment for analysing syslog events in Apache
   Zeppelin web notebooks.
