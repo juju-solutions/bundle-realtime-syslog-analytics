@@ -93,11 +93,11 @@ class TestBundle(unittest.TestCase):
         assert 'NodeManager' not in yarn, "NodeManager should not be running on resourcemanager"
         assert 'NodeManager' not in hdfs, "NodeManager should not be running on namenode"
 
-        assert 'DataNode' in slave, "DataServer not started"
+        assert 'DataNode' in slave, "DataNode not started"
         assert 'DataNode' not in yarn, "DataNode should not be running on resourcemanager"
         assert 'DataNode' not in hdfs, "DataNode should not be running on namenode"
 
-        assert 'zeppelin' in zeppelin, 'Zeppelin should be running on zeppelin'
+        assert 'ZeppelinServer' in zeppelin, 'ZeppelinServer should be running on zeppelin'
 
     def test_hdfs(self):
         """

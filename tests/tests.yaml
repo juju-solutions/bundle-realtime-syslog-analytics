@@ -4,6 +4,5 @@ sources:
   - 'ppa:juju/stable'
 packages:
   - amulet
-  - pyspark
   - python-requests
   - python3-yaml
