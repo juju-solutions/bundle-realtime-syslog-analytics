@@ -56,7 +56,7 @@ follows:
   * Client (Hadoop endpoint)
   * Plugin (Facilitates communication with the Hadoop cluster)
     * Colocated on the Client unit
-  * Zeppelin v0.7.0
+  * Zeppelin v0.7.2
     * Colocated on the Client unit
   * Flume-HDFS v1.6.0
     * Colocated on the Client unit
@@ -98,13 +98,13 @@ on building and deploying these charms locally.
 ## Network-Restricted Environments
 Charms can be deployed in environments with limited network access. To deploy
 in this environment, configure a Juju model with appropriate proxy and/or
-mirror options. See [Configuring Models][] for more information.
+mirror options. See [Working offline][] for more information.
 
-[getting-started]: https://jujucharms.com/docs/stable/getting-started
+[getting-started]: https://docs.jujucharms.com/2.4/en/getting-started
 [bundle.yaml]: https://github.com/juju-solutions/bundle-realtime-syslog-analytics/blob/master/bundle.yaml
 [Bigtop charm repository]: https://github.com/apache/bigtop/tree/master/bigtop-packages/src/charm
 [Bigtop charm README]: https://github.com/apache/bigtop/blob/master/bigtop-packages/src/charm/README.md
-[Configuring Models]: https://jujucharms.com/docs/stable/models-config
+[Working offline]: https://docs.jujucharms.com/2.4/en/charms-offline
 
 
 # Verifying

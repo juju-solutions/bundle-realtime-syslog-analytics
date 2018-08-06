@@ -11,7 +11,7 @@ tags:
   - bigtop
 services:
   namenode:
-    charm: "cs:xenial/hadoop-namenode-27"
+    charm: "cs:xenial/hadoop-namenode-44"
     constraints: "mem=7G root-disk=32G"
     num_units: 1
     annotations:
@@ -20,7 +20,7 @@ services:
     to:
       - "0"
   resourcemanager:
-    charm: "cs:xenial/hadoop-resourcemanager-29"
+    charm: "cs:xenial/hadoop-resourcemanager-46"
     constraints: "mem=7G root-disk=32G"
     num_units: 1
     annotations:
@@ -29,7 +29,7 @@ services:
     to:
       - "0"
   slave:
-    charm: "cs:xenial/hadoop-slave-28"
+    charm: "cs:xenial/hadoop-slave-45"
     constraints: "mem=7G root-disk=32G"
     num_units: 3
     annotations:
@@ -40,12 +40,12 @@ services:
       - "2"
       - "3"
   plugin:
-    charm: "cs:xenial/hadoop-plugin-27"
+    charm: "cs:xenial/hadoop-plugin-44"
     annotations:
       gui-x: "1000"
       gui-y: "400"
   client:
-    charm: "cs:xenial/hadoop-client-8"
+    charm: "cs:xenial/hadoop-client-10"
     constraints: "mem=7G root-disk=32G"
     num_units: 1
     annotations:
@@ -54,7 +54,7 @@ services:
     to:
       - "4"
   zeppelin:
-    charm: "cs:xenial/zeppelin-27"
+    charm: "cs:xenial/zeppelin-46"
     constraints: "mem=7G root-disk=32G"
     num_units: 1
     annotations:
